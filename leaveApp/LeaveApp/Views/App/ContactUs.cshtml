@@ -1,0 +1,111 @@
+﻿
+<!DOCTYPE html>
+@model LeaveApp.Models.Employee
+@{
+    ViewBag.Title = "";
+}
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Sign in &middot; Leave Mangement System</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Le styles -->
+    <!-- <link href="css/bootstrap.css" rel="stylesheet">-->
+    <link href="~/Content/bootstrap.css" rel="stylesheet" />
+    <style type="text/css">
+    </style>
+
+    <link href="~/Content/bootstrap-responsive.css" rel="stylesheet" />
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="../assets/js/html5shiv.js"></script>
+    <![endif]-->
+    <!-- Fav and touch icons -->
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="icon/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="icon/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="icon/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" href="icon/apple-touch-icon-57-precomposed.png">
+    <link rel="shortcut icon" href="icon/favicon.png">
+</head>
+
+<body>
+
+    <div class="container">
+
+
+
+
+        @using (Html.BeginForm("ContactUs", "App", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+        {
+
+            <div float="left">
+                <h3>Contact Naledi Group</h3>
+                <h5>Physical Address :</h5>
+                <p align="left">Mercedes Benz South Africa Limited</p>
+                <p align="left">123 Wierda Rd (M 10 West /R576) </p>
+                <p align="left"> Zwartkop</p>
+                <p align="left"> Centurion</p>
+                <p align="left"> 0046</p>
+            </div>
+
+
+                    <div float="right">
+
+                        <h5>Postal Address :</h5>
+                        <p align="left">P.O Box 10829</p>
+                        <p align="left">Centurion</p>
+                        <p align="left"> 0046</p>
+                    </div>
+
+
+                    <div float="right">
+
+                        <h5>Contact Numbers:</h5>
+                        <p align="left">Cell: 081 543 3787</p>
+                        <p align="left">Fax: +27 12 673 6050</p>
+                        <p align="left">E-Mail: <a href="mailto:nhlanhla.nkuna@daimler.com" title="Contact Us">nhlanhla.nkuna@daimler.com</a> </p>
+
+                    </div>
+
+                    <h5>Our Location:</h5>
+                    <div style="margin-top: 20px; text-align: center;">
+                        <iframe width="500" height="300" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d10157.190791637457!2d28.12077980037465!3d-25.83294532878532!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sza!4v1507034829179"></iframe>
+                    </div>
+
+
+
+
+
+        }
+
+
+
+
+    </div>
+
+
+
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="js/jquery.js"></script>
+    <script src="js/bootstrap-transition.js"></script>
+    <script src="js/bootstrap-alert.js"></script>
+    <script src="js/bootstrap-modal.js"></script>
+    <script src="js/bootstrap-dropdown.js"></script>
+    <script src="js/bootstrap-scrollspy.js"></script>
+    <script src="js/bootstrap-tab.js"></script>
+    <script src="js/bootstrap-tooltip.js"></script>
+    <script src="js/bootstrap-popover.js"></script>
+    <script src="js/bootstrap-button.js"></script>
+    <script src="js/bootstrap-collapse.js"></script>
+    <script src="js/bootstrap-carousel.js"></script>
+    <script src="js/bootstrap-typeahead.js"></script>
+
+
+</body>
+</html>
