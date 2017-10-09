@@ -1,0 +1,164 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="Intern_LeaveDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Application">
+    <Key>
+      <PropertyRef Name="App_ID" />
+    </Key>
+    <Property Name="App_ID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Date" Type="DateTime" Nullable="false" Precision="0" />
+    <Property Name="Emp_Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Days_Leave" Type="Int32" Nullable="false" />
+    <Property Name="Type_Leave" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="First_Day" Type="DateTime" Nullable="false" Precision="0" />
+    <Property Name="Last_Day" Type="DateTime" Nullable="false" Precision="0" />
+    <Property Name="Type_Emp" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Reason_Leave" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Emp_ID" Type="Int32" Nullable="false" />
+    <Property Name="App_Status" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="HRs" Relationship="Self.FK_HR_Application" FromRole="Application" ToRole="HR" />
+    <NavigationProperty Name="Managers" Relationship="Self.FK_Manager_Application" FromRole="Application" ToRole="Manager" />
+  </EntityType>
+  <EntityType Name="Employee">
+    <Key>
+      <PropertyRef Name="Emp_ID" />
+    </Key>
+    <Property Name="Emp_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Emp_Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Emp_Surname" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Emp_Password" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Emp_Division" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Manager_ID" Type="Int32" Nullable="false" />
+    <Property Name="Emp_StartDate" Type="DateTime" Nullable="false" Precision="0" />
+    <Property Name="Emp_EndDate" Type="DateTime" Nullable="false" Precision="0" />
+    <Property Name="App_ID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="Managers" Relationship="Self.FK_Manager_Employee" FromRole="Employee" ToRole="Manager" />
+  </EntityType>
+  <EntityType Name="HR">
+    <Key>
+      <PropertyRef Name="HR_ID" />
+    </Key>
+    <Property Name="HR_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="App_ID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Emp_ID" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Application" Relationship="Self.FK_HR_Application" FromRole="HR" ToRole="Application" />
+  </EntityType>
+  <EntityType Name="Manager">
+    <Key>
+      <PropertyRef Name="Manager_ID" />
+    </Key>
+    <Property Name="Manager_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Manager_Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Manager_Division" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Manager_Response" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Emp_ID" Type="Int32" Nullable="false" />
+    <Property Name="App_ID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="Application" Relationship="Self.FK_Manager_Application" FromRole="Manager" ToRole="Application" />
+    <NavigationProperty Name="Employee" Relationship="Self.FK_Manager_Employee" FromRole="Manager" ToRole="Employee" />
+  </EntityType>
+  <EntityType Name="sysdiagram">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="principal_id" Type="Int32" Nullable="false" />
+    <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="version" Type="Int32" />
+    <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+  </EntityType>
+  <Association Name="FK_HR_Application">
+    <End Role="Application" Type="Self.Application" Multiplicity="1" />
+    <End Role="HR" Type="Self.HR" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Application">
+        <PropertyRef Name="App_ID" />
+      </Principal>
+      <Dependent Role="HR">
+        <PropertyRef Name="App_ID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Manager_Application">
+    <End Role="Application" Type="Self.Application" Multiplicity="1" />
+    <End Role="Manager" Type="Self.Manager" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Application">
+        <PropertyRef Name="App_ID" />
+      </Principal>
+      <Dependent Role="Manager">
+        <PropertyRef Name="App_ID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Manager_Employee">
+    <End Role="Employee" Type="Self.Employee" Multiplicity="1" />
+    <End Role="Manager" Type="Self.Manager" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Employee">
+        <PropertyRef Name="Emp_ID" />
+      </Principal>
+      <Dependent Role="Manager">
+        <PropertyRef Name="Emp_ID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="Intern_LeaveDBEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Applications" EntityType="Self.Application" />
+    <EntitySet Name="Employees" EntityType="Self.Employee" />
+    <EntitySet Name="HRs" EntityType="Self.HR" />
+    <EntitySet Name="Managers" EntityType="Self.Manager" />
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagram" />
+    <AssociationSet Name="FK_HR_Application" Association="Self.FK_HR_Application">
+      <End Role="Application" EntitySet="Applications" />
+      <End Role="HR" EntitySet="HRs" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Manager_Application" Association="Self.FK_Manager_Application">
+      <End Role="Application" EntitySet="Applications" />
+      <End Role="Manager" EntitySet="Managers" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Manager_Employee" Association="Self.FK_Manager_Employee">
+      <End Role="Employee" EntitySet="Employees" />
+      <End Role="Manager" EntitySet="Managers" />
+    </AssociationSet>
+    <FunctionImport Name="sp_alterdiagram">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+      <Parameter Name="version" Mode="In" Type="Int32" />
+      <Parameter Name="definition" Mode="In" Type="Binary" />
+    </FunctionImport>
+    <FunctionImport Name="sp_creatediagram">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+      <Parameter Name="version" Mode="In" Type="Int32" />
+      <Parameter Name="definition" Mode="In" Type="Binary" />
+    </FunctionImport>
+    <FunctionImport Name="sp_dropdiagram">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="sp_helpdiagramdefinition" ReturnType="Collection(Intern_LeaveDBModel.sp_helpdiagramdefinition_Result)">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="sp_helpdiagrams" ReturnType="Collection(Intern_LeaveDBModel.sp_helpdiagrams_Result)">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="sp_renamediagram">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+      <Parameter Name="new_diagramname" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="sp_upgraddiagrams" />
+  </EntityContainer>
+  <ComplexType Name="sp_helpdiagramdefinition_Result">
+    <Property Type="Int32" Name="version" Nullable="true" />
+    <Property Type="Binary" Name="definition" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="sp_helpdiagrams_Result">
+    <Property Type="String" Name="Database" Nullable="true" MaxLength="128" />
+    <Property Type="String" Name="Name" Nullable="false" MaxLength="128" />
+    <Property Type="Int32" Name="ID" Nullable="false" />
+    <Property Type="String" Name="Owner" Nullable="true" MaxLength="128" />
+    <Property Type="Int32" Name="OwnerID" Nullable="false" />
+  </ComplexType>
+</Schema>

@@ -1,0 +1,140 @@
+﻿<!DOCTYPE html>
+@model LeaveApp.ViewModels.AppFormViewModel
+@{
+    ViewBag.Title = "Leave Form";
+}
+
+<script type="text/javascript">
+    $(function () {
+        $('.date-picker').datepicker();})
+
+</script>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Sign in &middot; Leave Management System</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+
+    <!-- Le styles -->
+
+    <link href="~/Content/bootstrap.css" rel="stylesheet" />
+    <style type="text/css">
+        table {
+            font-family: arial, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        td, th {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+
+        tr:nth-child(even) {
+            background-color: #dddddd;
+        }
+    </style>
+
+
+    <link href="~/Content/bootstrap-responsive.css" rel="stylesheet" />
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="../assets/js/html5shiv.js"></script>
+    <![endif]-->
+    <!-- Fav and touch icons -->
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="icon/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="icon/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="icon/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" href="icon/apple-touch-icon-57-precomposed.png">
+    <link rel="shortcut icon" href="icon/favicon.png">
+</head>
+
+<body>
+
+    @using (Html.BeginForm("appForm", "App", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+            <h2 class="form-signin-heading">Application Form</h2>
+
+            <hr>
+
+            <p align="right"> Welcome : @Session["username"] </p>
+            <p align="right"> No of Annual leave days left: @Session["Annual_Leave"]</p>
+            <p align="right"> No of Sick leave days left: @Session["Sick_Leave"]</p>
+            <p align="right"> No of Family Responsibility leave days left: @Session["Fam_Leave"]</p>
+
+            <h5>Apply for leave</h5>
+
+            <span>Enter your leave start date </span><br>
+        @Html.TextBoxFor(model => model.First_Day,new { @Value = "Select start date", id = "datepicker",@class= "date-picker" })
+    <br><br>
+
+       
+
+            <span>Enter your leave end date </span><br>
+        @Html.TextBoxFor(model => model.Last_Day, new { @Value = "select end date", id = "datepicker1", @class = "date-picker" })<br><br>
+
+
+            <b>Type of leave:</b>
+
+            <label class="radio" name="leaveType" align="left">
+                @Html.RadioButtonFor(model => model.Type_Leave, "Sick Leave") Sick Leave - Medical certificate : Yes <input type="checkbox" name="medCert" value=""/><br>
+               
+                    
+                    @*@Html.TextBoxFor(model => model.Emp_SickNote, "Emp_SickNote", new { type = "file" })
+                <button type="submit">Upload File</button>*@
+                    
+                
+                @Html.RadioButtonFor(model => model.Type_Leave, "Annual Leave") Annual Leave<br>
+                @Html.RadioButtonFor(model => model.Type_Leave, "Compassionate/family Leave") Compassionate/family Leave<br>
+            </label>
+            
+            
+            
+            <br>
+                        @Html.TextAreaFor(model => model.Reason_Leave,3)
+
+
+
+                        <br>
+                        <hr>
+
+        @Html.DropDownListFor(m => m.StandIn, new SelectList(Model.Names, "Standin"))
+
+        <br><br>
+
+     <button class="btn btn-large btn-primary" type="submit">Submit</button>
+     @Html.ActionLink("View Summary", "GetSummary", "App", new { username = @Session["username"] }, null)
+      <p align="right"> @Html.ActionLink("Change Password", "changePassword", "App") </p>
+    
+
+      
+
+
+
+    <!-- /container -->
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="js/jquery.js"></script>
+    <script src="js/bootstrap-transition.js"></script>
+    <script src="js/bootstrap-alert.js"></script>
+    <script src="js/bootstrap-modal.js"></script>
+    <script src="js/bootstrap-dropdown.js"></script>
+    <script src="js/bootstrap-scrollspy.js"></script>
+    <script src="js/bootstrap-tab.js"></script>
+    <script src="js/bootstrap-tooltip.js"></script>
+    <script src="js/bootstrap-popover.js"></script>
+    <script src="js/bootstrap-button.js"></script>
+    <script src="js/bootstrap-collapse.js"></script>
+    <script src="js/bootstrap-carousel.js"></script>
+    <script src="js/bootstrap-typeahead.js"></script>
+
+    }
+</body>
+
+</html>

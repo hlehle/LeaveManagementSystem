@@ -1,0 +1,97 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="Intern_LeaveDBModelStoreContainer" CdmEntityContainer="Intern_LeaveDBEntities1">
+    <EntitySetMapping Name="Application">
+      <EntityTypeMapping TypeName="Intern_LeaveDBModel.Application">
+        <MappingFragment StoreEntitySet="Application">
+          <ScalarProperty Name="App_ID" ColumnName="App_ID" />
+          <ScalarProperty Name="Date" ColumnName="Date" />
+          <ScalarProperty Name="Emp_Name" ColumnName="Emp_Name" />
+          <ScalarProperty Name="Days_Leave" ColumnName="Days_Leave" />
+          <ScalarProperty Name="Type_Leave" ColumnName="Type_Leave" />
+          <ScalarProperty Name="First_Day" ColumnName="First_Day" />
+          <ScalarProperty Name="Last_Day" ColumnName="Last_Day" />
+          <ScalarProperty Name="Type_Emp" ColumnName="Type_Emp" />
+          <ScalarProperty Name="Reason_Leave" ColumnName="Reason_Leave" />
+          <ScalarProperty Name="Emp_ID" ColumnName="Emp_ID" />
+          <ScalarProperty Name="App_Status" ColumnName="App_Status" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Employee">
+      <EntityTypeMapping TypeName="Intern_LeaveDBModel.Employee">
+        <MappingFragment StoreEntitySet="Employee">
+          <ScalarProperty Name="Emp_ID" ColumnName="Emp_ID" />
+          <ScalarProperty Name="Emp_Name" ColumnName="Emp_Name" />
+          <ScalarProperty Name="Emp_Surname" ColumnName="Emp_Surname" />
+          <ScalarProperty Name="Emp_Password" ColumnName="Emp_Password" />
+          <ScalarProperty Name="Emp_Division" ColumnName="Emp_Division" />
+          <ScalarProperty Name="Manager_ID" ColumnName="Manager_ID" />
+          <ScalarProperty Name="Emp_StartDate" ColumnName="Emp_StartDate" />
+          <ScalarProperty Name="Emp_EndDate" ColumnName="Emp_EndDate" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="HR">
+      <EntityTypeMapping TypeName="Intern_LeaveDBModel.HR">
+        <MappingFragment StoreEntitySet="HR">
+          <ScalarProperty Name="HR_ID" ColumnName="HR_ID" />
+          <ScalarProperty Name="Emp_ID" ColumnName="Emp_ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Manager">
+      <EntityTypeMapping TypeName="Intern_LeaveDBModel.Manager">
+        <MappingFragment StoreEntitySet="Manager">
+          <ScalarProperty Name="Manager_ID" ColumnName="Manager_ID" />
+          <ScalarProperty Name="Manager_Name" ColumnName="Manager_Name" />
+          <ScalarProperty Name="Manager_Division" ColumnName="Manager_Division" />
+          <ScalarProperty Name="Manager_Response" ColumnName="Manager_Response" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="sysdiagrams">
+      <EntityTypeMapping TypeName="Intern_LeaveDBModel.sysdiagrams">
+        <MappingFragment StoreEntitySet="sysdiagrams">
+          <ScalarProperty Name="name" ColumnName="name" />
+          <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+          <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+          <ScalarProperty Name="version" ColumnName="version" />
+          <ScalarProperty Name="definition" ColumnName="definition" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <AssociationSetMapping Name="FK_Employee_Application" TypeName="Intern_LeaveDBModel.FK_Employee_Application" StoreEntitySet="Employee">
+      <EndProperty Name="Application">
+        <ScalarProperty Name="App_ID" ColumnName="App_ID" />
+      </EndProperty>
+      <EndProperty Name="Employee">
+        <ScalarProperty Name="Emp_ID" ColumnName="Emp_ID" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="FK_HR_Application" TypeName="Intern_LeaveDBModel.FK_HR_Application" StoreEntitySet="HR">
+      <EndProperty Name="Application">
+        <ScalarProperty Name="App_ID" ColumnName="App_ID" />
+      </EndProperty>
+      <EndProperty Name="HR">
+        <ScalarProperty Name="HR_ID" ColumnName="HR_ID" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="FK_Manager_Application" TypeName="Intern_LeaveDBModel.FK_Manager_Application" StoreEntitySet="Manager">
+      <EndProperty Name="Application">
+        <ScalarProperty Name="App_ID" ColumnName="App_ID" />
+      </EndProperty>
+      <EndProperty Name="Manager">
+        <ScalarProperty Name="Manager_ID" ColumnName="Manager_ID" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="FK_Manager_Employee" TypeName="Intern_LeaveDBModel.FK_Manager_Employee" StoreEntitySet="Manager">
+      <EndProperty Name="Employee">
+        <ScalarProperty Name="Emp_ID" ColumnName="Emp_ID" />
+      </EndProperty>
+      <EndProperty Name="Manager">
+        <ScalarProperty Name="Manager_ID" ColumnName="Manager_ID" />
+      </EndProperty>
+    </AssociationSetMapping>
+  </EntityContainerMapping>
+</Mapping>

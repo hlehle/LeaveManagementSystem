@@ -1,0 +1,105 @@
+﻿@model IEnumerable<LeaveApp.Models.Application>
+
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Sign in &middot; Leave Management System</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+
+    <!-- Le styles -->
+
+    <link href="~/Content/bootstrap.css" rel="stylesheet" />
+    <style type="text/css">
+        table {
+            font-family: arial, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        td, th {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 4px;
+        }
+
+        tr:nth-child(even) {
+            background-color: #dddddd;
+        }
+    </style>
+
+
+    <link href="~/Content/bootstrap-responsive.css" rel="stylesheet" />
+</head>
+<body>
+
+    <h2>Welcome: @Session["username"]</h2>
+
+@using (Html.BeginForm("ManagerPage", "App", FormMethod.Post))
+{
+
+    <table>
+        <tr>
+
+            <th>App_ID</th>
+            <th>Date</th>
+            <th>Employee Name</th>
+            <th>Start date</th>
+            <th>End date</th>
+            <th>Type of leave</th>
+            <th>No of leave days</th>
+            <th>Stand in</th>
+            <th>Sick Note</th>
+            <th>Status</th>
+            <th>Summary</th>
+        </tr>
+       @foreach (var app in Model)
+       {
+           if (app.App_Status == "Pending")
+           {
+               <tr>
+                   <td>@Html.Hidden("ID", @app.App_ID.ToString())
+                       @app.App_ID</td>
+                   <td>@app.Date.ToString("dd/MM/yyyy")</td>
+                   <td>@Html.Hidden("Emp_ID", @app.Emp_ID)
+                       @app.Emp_Name</td>
+                   <td>@app.First_Day.ToString("dd/MM/yyyy")</td>
+                   <td>@app.Last_Day.ToString("dd/MM/yyyy")</td>
+                   <td>@Html.Hidden("leave_Type", @app.Type_Leave)
+                       @app.Type_Leave</td>
+                   <td>@Html.Hidden("leave_Days", @app.Leave_Days)
+                       @app.Leave_Days</td>
+                   <td>@app.standIn</td>
+                   <td>@app.Emp_SickNote</td>
+                   <td>
+                       @Html.DropDownList("App_Status", new List<SelectListItem>
+                        {   new SelectListItem { Text="-Please Reply Request-", Value = "Pending" },
+                            new SelectListItem { Text="Approve", Value = "Approved"},
+                            new SelectListItem { Text="Decline", Value = "Declined"},
+                        })
+                   </td>
+                   <td>@Html.ActionLink("View Summary", "GetSummary", "App", new { username = @app.Emp_Name }, null)</td>
+               </tr>
+           }
+       }
+    </table>
+    <br><br>
+    <button class="btn btn-large btn-primary" type="submit">Submit</button>
+
+    <script>
+        function getAppStatus(element){
+            var a =  $(element).closest('tr');
+            return $("#App_Status", a).val();
+
+
+
+        }
+            function SubmitLeaveResponse(appId, userId, appResponse) {
+                var jqxhr = $.post("@Url.Action("ManagerPage")", { appId: appId, userId: userId, approvalResponse:appResponse } );
+            };
+    </script>
+}
+</body>
+</html>
