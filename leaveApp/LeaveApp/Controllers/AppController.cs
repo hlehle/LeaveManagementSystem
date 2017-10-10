@@ -152,6 +152,7 @@ namespace LeaveApp.Controllers
 
                         if (app.App_Status.Equals("Approved"))
                         {
+
                             var leaveDb = db.Leave_Days.Single(a => a.Emp_ID == app.Emp_ID);
 
                             if(leave_Type.Contains("Annual"))
@@ -193,7 +194,7 @@ namespace LeaveApp.Controllers
                     {
 
                         var leave = db.Leave_Days.Where(t => t.Emp_ID.Equals(emp.Emp_ID)).FirstOrDefault();
-                        var empList = db.Employees.Where(b => b.Emp_ID != empId && b.Emp_Division != "Manager" && b.availability == "Available").Select(b => b.Emp_Name + " " + b.Emp_Surname).ToList();
+                        var empList = db.Employees.Where(b => b.Emp_ID != empId && b.Emp_Division != "Manager").Select(b => b.Emp_Name + " " + b.Emp_Surname).ToList();
                         var viewModel = new ViewModels.AppFormViewModel();
 
                         viewModel.Names = empList;
@@ -224,37 +225,23 @@ namespace LeaveApp.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    //var expiredApplication = db.Applications.Where(c => c.Last_Day < DateTime.Now);
-                    
-                    //if (expiredApplication != null)
-                    //{
-                    //    Employee[] leaveEnded = db.Employees.Where(t => t.Availability == "Not Available" && expiredApplication.Single(a => a.Emp_ID == t.Emp_ID));
-                    //    if (leaveEnded != null)
-                    //    {
-                    //        foreach (var item in leaveEnded)
-                    //        {
-                    //            leaveEnded.Availability = "Available";
-                    //            db.SaveChanges();
-                    //        }
-                    //    } 
-                        
-                    //}
+                    Application myApp = new Application();
+                    myApp.Date = DateTime.Now;
+                    myApp.Emp_Name = Session["username"].ToString();
+                    myApp.Emp_ID = int.Parse(Session["userid"].ToString());
+                    myApp.First_Day = appForm.First_Day;
+                    myApp.Last_Day = appForm.Last_Day;
+                    myApp.Leave_Days = numberOfLeaveDays(appForm.First_Day, appForm.Last_Day);
+                    myApp.Reason_Leave = appForm.Reason_Leave;
+                    myApp.App_Status = "Pending";
+                    myApp.Type_Leave = appForm.Type_Leave;
+                    myApp.standIn = appForm.StandIn;
 
-                    Application app = new Application();
-                    app.Date = DateTime.Now;
-                    app.Emp_Name = Session["username"].ToString();
-                    app.Emp_ID = int.Parse(Session["userid"].ToString());
-                    app.First_Day = appForm.First_Day;
-                    app.Last_Day = appForm.Last_Day;
-                    app.Leave_Days = numberOfLeaveDays(appForm.First_Day, appForm.Last_Day);
-                    app.Reason_Leave = appForm.Reason_Leave;
-                    app.App_Status = "Pending";
-                    app.Type_Leave = appForm.Type_Leave;
-                    app.standIn = appForm.StandIn;
+                    var overlappingApps = db.Applications.Where(a => a.Last_Day >= myApp.First_Day || a.First_Day <= myApp.Last_Day).Select(a => a.Emp_ID).ToList();
 
                     string user = Session["username"].ToString();
-                    var empList = db.Employees.Where(b => b.Emp_Name != user && b.Emp_Division != "Manager" && b.availability == "Available").Select(b => b.Emp_Name + " " + b.Emp_Surname).ToList();
-                    appForm.Names = empList;
+                    var availEmpList = db.Employees.Where(b => b.Emp_Name != user && b.Emp_Division != "Manager" && overlappingApps.Contains(b.Emp_ID) == false).Select(b => b.Emp_Name + " " + b.Emp_Surname).ToList();
+                    appForm.Names = availEmpList;
 
 
                     //if(appForm.Emp_SickNote.ContentLength > 0)
@@ -265,21 +252,28 @@ namespace LeaveApp.Controllers
                     //model.Emp_SickNote.InputStream.Read(uploadedFile, 0, uploadedFile.Length);
 
                     //app.Emp_SickNote = uploadedFile;
-                  
+
                     //validate start date and end date.
+
+                   if (!availEmpList.Contains(myApp.standIn))
+                    {
+                        Response.Write("<script LANGUAGE='JavaScript' >alert('User currently on leave please selece another stand in.')</script>");
+                        return View(appForm);
+                    }
+
                     if (appForm.First_Day > appForm.Last_Day)
                     {
                         Response.Write("<script LANGUAGE='JavaScript' >alert('Your last day of leave cannot occur before your start day.')</script>");
                         return View(appForm);
                     }
                     //Validate leave limit
-                    if (app.Leave_Days >= 10)
+                    if (myApp.Leave_Days >= 10)
                     {
                         Response.Write("<script LANGUAGE='JavaScript' >alert('You can not take more than 10 leave days at once')</script>");
                         return View(appForm);
                     }
                     //defining leave days Database.
-                   var leaveDb = db.Leave_Days.Single(t => t.Emp_ID == app.Emp_ID);
+                   var leaveDb = db.Leave_Days.Single(t => t.Emp_ID == myApp.Emp_ID);
                     //validate if Radiolist is checked.
                     if (appForm.Type_Leave == null)
                     {
@@ -287,25 +281,30 @@ namespace LeaveApp.Controllers
                         return View(appForm);
                     }
                     //validating leave limit
-                    if ( (leaveDb.Annual_Leave == 0 && app.Type_Leave.Contains("Annual")) || (leaveDb.Annual_Leave < app.Leave_Days) )
+                    if ( (leaveDb.Annual_Leave == 0 && myApp.Type_Leave.Contains("Annual")) || (leaveDb.Annual_Leave < myApp.Leave_Days) )
                     {
                         Response.Write("<script LANGUAGE='JavaScript' >alert('You have exhausted your Annual leave days')</script>");
                         return View(appForm);
                     }
 
-                    if (leaveDb.Sick_Leave == 0 && app.Type_Leave.Contains("Sick") || (leaveDb.Sick_Leave < app.Leave_Days) )
+                    if (leaveDb.Sick_Leave == 0 && myApp.Type_Leave.Contains("Sick") || (leaveDb.Sick_Leave < myApp.Leave_Days) )
                     {
                         Response.Write("<script LANGUAGE='JavaScript' >alert('You have exhausted your Sick leave days')</script>");
                         return View(appForm);
                     }
 
-                    if (leaveDb.Fam_Leave == 0 && app.Type_Leave.Contains("fam") || (leaveDb.Fam_Leave < app.Leave_Days) )
+                    if (leaveDb.Fam_Leave == 0 && myApp.Type_Leave.Contains("fam"))
                     {
+                        if(leaveDb.Fam_Leave < myApp.Leave_Days)
+                        {
+                            Response.Write("<script LANGUAGE='JavaScript' >alert('You have exhausted your Family Responsebility leave days')</script>");
+                            return View(appForm);
+                        }
                         Response.Write("<script LANGUAGE='JavaScript' >alert('You have exhausted your Family Responsebility leave days')</script>");
                         return View(appForm);
                     }
 
-                    db.Applications.Add(app);
+                    db.Applications.Add(myApp);
                     db.SaveChanges();
                     Response.Write("<script LANGUAGE='JavaScript' >alert('Leave booked awaiting for manager approval')</script>");
                 }
