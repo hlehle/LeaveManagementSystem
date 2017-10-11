@@ -246,11 +246,14 @@
       <SubType>Designer</SubType>
     </Content>
     <Content Include="Views\_ViewStart.cshtml" />
-    <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\App\loginPage.cshtml" />
     <Content Include="Scripts\jquery-2.2.4.min.map" />
     <Content Include="Views\App\ManagerPage.cshtml" />
     <Content Include="Views\App\changePassword.cshtml" />
+    <Content Include="Views\App\AboutUs.cshtml" />
+    <Content Include="Views\App\ContactUs.cshtml" />
+    <Content Include="Views\App\GetSummary.cshtml" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

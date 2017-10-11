@@ -356,6 +356,16 @@ namespace LeaveApp.Controllers
                 return days;
         }
 
+        public ActionResult AboutUs()
+        {
+            return View();
+        }
+
+        public ActionResult ContactUs()
+        {
+            return View();
+        }
+
         //[HttpPost]
         public ActionResult changePassword(FormCollection form)
         {
@@ -384,10 +394,6 @@ namespace LeaveApp.Controllers
             }
             return View();
         }
-<<<<<<< HEAD
-       
-       
-=======
 
         public ActionResult GetAvailableStandins(DateTime start, DateTime end)
         {
@@ -402,7 +408,5 @@ namespace LeaveApp.Controllers
                 return Json(availEmpList);
             }
         }
-
->>>>>>> e38059efb2d80f76a2d945d7f5eb3017e691cd62
     }
 }
