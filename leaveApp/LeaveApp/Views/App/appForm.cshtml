@@ -6,7 +6,32 @@
 
 <script type="text/javascript">
     $(function () {
-        $('.date-picker').datepicker();})
+        $('.date-picker').datepicker();
+    });
+
+    $(document).ready(function () {
+        $.post("@Url.Action("GetAvailableStandins")");//wire up the event of datepicker date changed to getAvailStandinAjax()
+    });
+
+    function getAvailStandinAjax() {
+        var start = 'datepicker'; //get the value from datepicker
+        var end = 'datepicker1';  //get the value from datepicker
+
+        if (start != '' && end != '') {
+            $.ajax({
+                type: 'GET',
+                url: 'App/GetAvailableStandins?start=' + start + '&end=' + end,
+                success:
+                    function (data) {
+                        alert('got values');
+                    },
+                error:
+                function (data) {
+                    alert('error');
+                },
+            });
+        }
+    }
 
 </script>
 <html lang="en">

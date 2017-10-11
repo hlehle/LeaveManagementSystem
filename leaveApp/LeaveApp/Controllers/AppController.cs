@@ -254,6 +254,12 @@ namespace LeaveApp.Controllers
                     //app.Emp_SickNote = uploadedFile;
 
                     //validate start date and end date.
+                    if (myApp.Leave_Days == 0)
+                    {
+                        Response.Write("<script LANGUAGE='JavaScript' >alert('Your Leave must be on a working day')</script>");
+                        return View(appForm);
+                    }
+
 
                    if (!availEmpList.Contains(myApp.standIn))
                     {
@@ -334,9 +340,9 @@ namespace LeaveApp.Controllers
             Holidays.Add(new DateTime(DateTime.Now.Year, 12, 25));
             Holidays.Add(new DateTime(DateTime.Now.Year, 12, 26));
 
-            int days = 1;
+            int days = 0;
             
-            while (start < stop)
+            while (start <= stop)
             {
                 if (start.DayOfWeek == DayOfWeek.Saturday || start.DayOfWeek == DayOfWeek.Sunday || Holidays.Any(a => a == start))
                 { }
@@ -378,7 +384,25 @@ namespace LeaveApp.Controllers
             }
             return View();
         }
+<<<<<<< HEAD
        
        
+=======
+
+        public ActionResult GetAvailableStandins(DateTime start, DateTime end)
+        {
+            using (Intern_LeaveDBEntities db = new Intern_LeaveDBEntities())
+            {
+
+                var overlappingApps = db.Applications.Where(a => a.Last_Day >= start || a.First_Day <= end).Select(a => a.Emp_ID).ToList();
+
+                string user = Session["username"].ToString();
+                var availEmpList = db.Employees.Where(b => b.Emp_Name != user && b.Emp_Division != "Manager" && overlappingApps.Contains(b.Emp_ID) == false).Select(b => b.Emp_Name + " " + b.Emp_Surname).ToList();
+
+                return Json(availEmpList);
+            }
+        }
+
+>>>>>>> e38059efb2d80f76a2d945d7f5eb3017e691cd62
     }
 }
