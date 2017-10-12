@@ -237,21 +237,21 @@ namespace LeaveApp.Controllers
                     myApp.Type_Leave = appForm.Type_Leave;
                     myApp.standIn = appForm.StandIn;
 
-                    var overlappingApps = db.Applications.Where(a => a.Last_Day >= myApp.First_Day || a.First_Day <= myApp.Last_Day).Select(a => a.Emp_ID).ToList();
+                    var overlappingApps = db.Applications.Where(a => a.App_Status == "Approved" && (a.Last_Day >= myApp.First_Day || a.First_Day <= myApp.Last_Day)).Select(a => a.Emp_ID).ToList();
 
                     string user = Session["username"].ToString();
                     var availEmpList = db.Employees.Where(b => b.Emp_Name != user && b.Emp_Division != "Manager" && overlappingApps.Contains(b.Emp_ID) == false).Select(b => b.Emp_Name + " " + b.Emp_Surname).ToList();
                     appForm.Names = availEmpList;
 
+                    
+                    appForm.File = Request.Files[0];
+                    if (appForm.File != null)
+                    {
+                        appForm.Emp_SickNote = new byte[appForm.File.ContentLength];
+                        appForm.File.InputStream.Read(appForm.Emp_SickNote, 0, appForm.File.ContentLength);
+                        myApp.Emp_SickNote = appForm.Emp_SickNote;
+                    }
 
-                    //if(appForm.Emp_SickNote.ContentLength > 0)
-                    //{
-                    //    return Content("Yes");
-                    //}
-                    //byte[] uploadedFile = new byte[model.Emp_SickNote.InputStream.Length];
-                    //model.Emp_SickNote.InputStream.Read(uploadedFile, 0, uploadedFile.Length);
-
-                    //app.Emp_SickNote = uploadedFile;
 
                     //validate start date and end date.
                     if (myApp.Leave_Days == 0)
@@ -263,7 +263,7 @@ namespace LeaveApp.Controllers
 
                    if (!availEmpList.Contains(myApp.standIn))
                     {
-                        Response.Write("<script LANGUAGE='JavaScript' >alert('User currently on leave please selece another stand in.')</script>");
+                        Response.Write("<script LANGUAGE='JavaScript' >alert('User currently on leave please select another stand in.')</script>");
                         return View(appForm);
                     }
 
@@ -287,28 +287,37 @@ namespace LeaveApp.Controllers
                         return View(appForm);
                     }
                     //validating leave limit
-                    if ( (leaveDb.Annual_Leave == 0 && myApp.Type_Leave.Contains("Annual")) || (leaveDb.Annual_Leave < myApp.Leave_Days) )
+                    switch (myApp.Type_Leave)
                     {
-                        Response.Write("<script LANGUAGE='JavaScript' >alert('You have exhausted your Annual leave days')</script>");
-                        return View(appForm);
+                        case "Annual Leave":
+                            if ((leaveDb.Annual_Leave == 0 && myApp.Type_Leave.Contains("Annual")) || (leaveDb.Annual_Leave < myApp.Leave_Days))
+                            {
+                                Response.Write("<script LANGUAGE='JavaScript' >alert('You have exhausted your Annual leave days')</script>");
+                                return View(appForm);
+                            }
+                            break;
+
+                        case "Sick Leave":
+                            if (leaveDb.Sick_Leave == 0 && myApp.Type_Leave.Contains("Sick") || (leaveDb.Sick_Leave < myApp.Leave_Days))
+                            {
+                                Response.Write("<script LANGUAGE='JavaScript' >alert('You have exhausted your Sick leave days')</script>");
+                                return View(appForm);
+                            }
+                            break;
+
+                        case "Compassionate/family Leave":
+                            if (leaveDb.Fam_Leave == 0 && myApp.Type_Leave.Contains("fam") || (leaveDb.Fam_Leave < myApp.Leave_Days))
+                            {
+                                Response.Write("<script LANGUAGE='JavaScript' >alert('You have exhausted your Family Responsebility leave days')</script>");
+                                return View(appForm);
+                            }
+                            break;
                     }
 
-                    if (leaveDb.Sick_Leave == 0 && myApp.Type_Leave.Contains("Sick") || (leaveDb.Sick_Leave < myApp.Leave_Days) )
-                    {
-                        Response.Write("<script LANGUAGE='JavaScript' >alert('You have exhausted your Sick leave days')</script>");
-                        return View(appForm);
-                    }
 
-                    if (leaveDb.Fam_Leave == 0 && myApp.Type_Leave.Contains("fam"))
-                    {
-                        if(leaveDb.Fam_Leave < myApp.Leave_Days)
-                        {
-                            Response.Write("<script LANGUAGE='JavaScript' >alert('You have exhausted your Family Responsebility leave days')</script>");
-                            return View(appForm);
-                        }
-                        Response.Write("<script LANGUAGE='JavaScript' >alert('You have exhausted your Family Responsebility leave days')</script>");
-                        return View(appForm);
-                    }
+
+
+
 
                     db.Applications.Add(myApp);
                     db.SaveChanges();
@@ -393,6 +402,19 @@ namespace LeaveApp.Controllers
                 Response.Write("<script LANGUAGE='JavaScript' >alert('Password changed successfully')</script>");
             }
             return View();
+        }
+
+        public ActionResult DisplayNote(int id)
+        {
+
+            using (Intern_LeaveDBEntities db = new Intern_LeaveDBEntities())
+            {
+
+                var stream = (from m in db.Applications where m.App_ID == id select m.Emp_SickNote).FirstOrDefault();
+
+                return File(stream, "application/pdf");
+            }
+
         }
 
         public ActionResult GetAvailableStandins(DateTime start, DateTime end)

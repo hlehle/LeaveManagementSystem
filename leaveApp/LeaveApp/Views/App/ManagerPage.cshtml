@@ -72,7 +72,7 @@
                    <td>@Html.Hidden("leave_Days", @app.Leave_Days)
                        @app.Leave_Days</td>
                    <td>@app.standIn</td>
-                   <td>@app.Emp_SickNote</td>
+                   <td>@Html.ActionLink("View Note", "DisplayNote", "App", new { id = @app.App_ID }, null)</td>
                    <td>
                        @Html.DropDownList("App_Status", new List<SelectListItem>
                         {   new SelectListItem { Text="-Please Reply Request-", Value = "Pending" },

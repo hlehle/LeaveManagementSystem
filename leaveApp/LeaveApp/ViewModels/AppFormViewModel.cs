@@ -26,7 +26,8 @@ namespace LeaveApp.ViewModels
         public int Sick_Leave { get; set; }
         public int Fam_Leave { get; set; }
         [DataType(DataType.Upload)]
-        public HttpPostedFileBase Emp_SickNote { get; set; }
+        public byte[] Emp_SickNote { get; set; }
+        public HttpPostedFileBase File { get; set; }
         public List<string> Names { get; set; }
     }
 }

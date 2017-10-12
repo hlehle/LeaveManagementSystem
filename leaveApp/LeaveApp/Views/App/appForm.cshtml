@@ -109,9 +109,9 @@
             <label class="radio" name="leaveType" align="left">
                 @Html.RadioButtonFor(model => model.Type_Leave, "Sick Leave") Sick Leave - Medical certificate : Yes <input type="checkbox" name="medCert" value=""/><br>
                
-                    
-                    @*@Html.TextBoxFor(model => model.Emp_SickNote, "Emp_SickNote", new { type = "file" })
-                <button type="submit">Upload File</button>*@
+                    @Html.TextBoxFor(model => model.File, new { type = "file", id = "File" })<br>
+                    @*@Html.TextBoxFor(model => model.Emp_SickNote, "Emp_SickNote", new { type = "file" })*@
+                @*<button type="submit">Upload File</button>*@
                     
                 
                 @Html.RadioButtonFor(model => model.Type_Leave, "Annual Leave") Annual Leave<br>
