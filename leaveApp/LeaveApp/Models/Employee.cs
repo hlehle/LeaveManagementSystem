@@ -11,7 +11,8 @@ namespace LeaveApp.Models
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel.DataAnnotations;
+
     public partial class Employee
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
@@ -23,11 +24,13 @@ namespace LeaveApp.Models
         public int Emp_ID { get; set; }
         public string Emp_Name { get; set; }
         public string Emp_Surname { get; set; }
+        [Required(ErrorMessage = "Password Password")]
         public string Emp_Password { get; set; }
         public string Emp_Division { get; set; }
         public int Manager_ID { get; set; }
         public System.DateTime Emp_StartDate { get; set; }
         public System.DateTime Emp_EndDate { get; set; }
+        [Required(ErrorMessage = "Username Required")]
         public string Username { get; set; }
         public string Emp_emailAddr { get; set; }
         public string Emp_Contact { get; set; }

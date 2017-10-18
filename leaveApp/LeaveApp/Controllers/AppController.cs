@@ -194,6 +194,7 @@ namespace LeaveApp.Controllers
                     {
 
                         var leave = db.Leave_Days.Where(t => t.Emp_ID.Equals(emp.Emp_ID)).FirstOrDefault();
+
                         var empList = db.Employees.Where(b => b.Emp_ID != empId && b.Emp_Division != "Manager").Select(b => b.Emp_Name + " " + b.Emp_Surname).ToList();
                         var viewModel = new ViewModels.AppFormViewModel();
 
@@ -222,7 +223,7 @@ namespace LeaveApp.Controllers
             var appForm = new AppFormViewModel();
             TryUpdateModel<AppFormViewModel>(appForm, form);
             using (Intern_LeaveDBEntities db = new Intern_LeaveDBEntities())
-            {
+            {  
                 if (ModelState.IsValid)
                 {
                     Application myApp = new Application();
@@ -253,7 +254,7 @@ namespace LeaveApp.Controllers
                     }
 
 
-                    //validate start date and end date.
+                    
                     if (myApp.Leave_Days == 0)
                     {
                         Response.Write("<script LANGUAGE='JavaScript' >alert('Your Leave must be on a working day')</script>");
@@ -313,16 +314,20 @@ namespace LeaveApp.Controllers
                             }
                             break;
                     }
-
-
-
-
-
-
                     db.Applications.Add(myApp);
                     db.SaveChanges();
+                  
+                    
                     Response.Write("<script LANGUAGE='JavaScript' >alert('Leave booked awaiting for manager approval')</script>");
                 }
+
+                else // (!ModelState.IsValid)
+                {
+
+                    return RedirectToAction("ErrorPage");
+                    //return Content(";,l");
+                }
+
             }
             return View(appForm);
 
@@ -429,6 +434,11 @@ namespace LeaveApp.Controllers
 
                 return Json(availEmpList);
             }
+        }
+
+        public ActionResult ErrorPage()
+        {
+            return View();
         }
     }
 }
