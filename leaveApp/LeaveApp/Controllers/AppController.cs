@@ -289,7 +289,7 @@ namespace LeaveApp.Controllers
                     switch (myApp.Type_Leave)
                     {
                         case "Annual Leave":
-                            if ((leaveDb.Annual_Leave == 0 && myApp.Type_Leave.Contains("Annual")) || (leaveDb.Annual_Leave < myApp.Leave_Days))
+                            if (leaveDb.Annual_Leave < myApp.Leave_Days)
                             {
                                 Response.Write("<script LANGUAGE='JavaScript' >alert('You have exhausted your Annual leave days')</script>");
                                 return View(appForm);
@@ -297,7 +297,7 @@ namespace LeaveApp.Controllers
                             break;
 
                         case "Sick Leave":
-                            if (leaveDb.Sick_Leave == 0 && myApp.Type_Leave.Contains("Sick") || (leaveDb.Sick_Leave < myApp.Leave_Days))
+                            if (leaveDb.Sick_Leave < myApp.Leave_Days)
                             {
                                 Response.Write("<script LANGUAGE='JavaScript' >alert('You have exhausted your Sick leave days')</script>");
                                 return View(appForm);
@@ -305,7 +305,7 @@ namespace LeaveApp.Controllers
                             break;
 
                         case "Compassionate/family Leave":
-                            if (leaveDb.Fam_Leave == 0 && myApp.Type_Leave.Contains("fam") || (leaveDb.Fam_Leave < myApp.Leave_Days))
+                            if (leaveDb.Fam_Leave < myApp.Leave_Days)
                             {
                                 Response.Write("<script LANGUAGE='JavaScript' >alert('You have exhausted your Family Responsebility leave days')</script>");
                                 return View(appForm);
@@ -436,6 +436,11 @@ namespace LeaveApp.Controllers
         }
 
         public ActionResult ErrorPage()
+        {
+            return View();
+        }
+
+        public ActionResult Home()
         {
             return View();
         }
