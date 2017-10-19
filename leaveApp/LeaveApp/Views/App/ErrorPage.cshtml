@@ -1,4 +1,4 @@
-﻿@model IEnumerable<LeaveApp.Models.Application>
+﻿@model LeaveApp.ViewModels.AppFormViewModel
 
 <html lang="en">
 <head>
@@ -34,11 +34,12 @@
     <link href="~/Content/bootstrap-responsive.css" rel="stylesheet" />
 </head>
 <body>
+
     <h2>Error Page</h2>
 
     <br>
     <p align="right">
-        @Html.ActionLink("Back to previous page", null, null, null, new { Href = Request.ApplicationPath })
+        @*@Html.ActionLink("Back to previous page", null, null, null, new { Href = Request.ApplicationPath })*@
     </p>
 </body>
 </html>

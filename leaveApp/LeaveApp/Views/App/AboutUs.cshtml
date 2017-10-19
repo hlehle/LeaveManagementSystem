@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-@model LeaveApp.Models.Employee
+@model LeaveApp.ViewModels.AppFormViewModel
 @{
     ViewBag.Title = "About Us";
 }
@@ -32,40 +32,6 @@
 </head>
 
 <body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="navbar-inner">
-            <div class="container">
-                <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <!-- @Html.ActionLink("Application name", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })-->
-                <!-- <a class="brand" href="#"> Leave Mangement System</a>-->
-                @*<a class="brand" href="#">Leave Management System</a>*@
-
-                <div class="nav-collapse collapse">
-
-                    <ul class="nav">
-                        <li><a class="brand" @Html.ActionLink("Leave Management System", "Leave_Management_System")</a></li>
-                        <li>@Html.ActionLink("About", "AboutUs")</li>
-                        <li>@Html.ActionLink("Contact ", "ContactUs")</li>
-                        <li>@Html.ActionLink("Logout", "")</li>
-
-
-
-
-
-                    </ul>
-                </div><!--/.nav-collapse -->
-            </div>
-        </div>
-    </div>
-
-    <div class="container">
-
-
-
         @using (Html.BeginForm("AboutUs", "App", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
         {
 
@@ -85,7 +51,6 @@
 
 
         }
-    </div>
 
 
 

@@ -14,14 +14,10 @@ namespace LeaveApp.Controllers
 {
     public class AppController : Controller
     {
+        ViewModels.AppFormViewModel viewModel = new ViewModels.AppFormViewModel();
         // GET: App
-        public ActionResult Index()
-        {
-            return View();
-        }
         public ActionResult loginPage()
         {
-
             return View();
         }
         [HttpPost]
@@ -34,7 +30,6 @@ namespace LeaveApp.Controllers
                     var emp = db.Employees.Where(a => a.Username.Equals(objEmp.Username)
                     && a.Emp_Password.Equals(objEmp.Emp_Password)).FirstOrDefault();
 
-
                     if (emp != null)
                     {
                         Session["userid"] = emp.Emp_ID.ToString();
@@ -46,7 +41,7 @@ namespace LeaveApp.Controllers
                         }
                         var leave = db.Leave_Days.Where(t => t.Emp_ID.Equals(emp.Emp_ID)).FirstOrDefault();
 
-                        var viewModel = new ViewModels.AppFormViewModel();
+                        viewModel = new ViewModels.AppFormViewModel();
                         viewModel.Emp_ID = emp.Emp_ID;
 
                         return RedirectToAction("appForm", new { empId = emp.Emp_ID });
@@ -183,37 +178,40 @@ namespace LeaveApp.Controllers
         }
         public ActionResult appForm(int? empId)
         {
-
             if (empId.HasValue && Session["userid"] != null)
-            {
-
+            {  
                 using (Intern_LeaveDBEntities db = new Intern_LeaveDBEntities())
                 {
                     var emp = db.Employees.Where(a => a.Emp_ID.Equals(empId.Value)).FirstOrDefault();
                     if (emp != null)
                     {
+                        if (emp.Emp_Division == "Manager")
+                        {
+                            return RedirectToAction("ManagerPage");
+                        }
 
-                        var leave = db.Leave_Days.Where(t => t.Emp_ID.Equals(emp.Emp_ID)).FirstOrDefault();
+                        else
+                        {
+                            var leave = db.Leave_Days.Where(t => t.Emp_ID.Equals(emp.Emp_ID)).FirstOrDefault();
 
-                        var empList = db.Employees.Where(b => b.Emp_ID != empId && b.Emp_Division != "Manager").Select(b => b.Emp_Name + " " + b.Emp_Surname).ToList();
-                        var viewModel = new ViewModels.AppFormViewModel();
+                            var empList = db.Employees.Where(b => b.Emp_ID != empId && b.Emp_Division != "Manager").Select(b => b.Emp_Name + " " + b.Emp_Surname).ToList();
 
-                        viewModel.Names = empList;
+                            viewModel.Names = empList;
+                            viewModel.Emp_ID = (int)empId;
 
-                        Session["Annual_Leave"] = leave.Annual_Leave;
-                        Session["Sick_Leave"] = leave.Sick_Leave;
-                        Session["Fam_Leave"] = leave.Fam_Leave;
-
-
-
-                        return View(viewModel);
+                            Session["Annual_Leave"] = leave.Annual_Leave;
+                            Session["Sick_Leave"] = leave.Sick_Leave;
+                            Session["Fam_Leave"] = leave.Fam_Leave;
+                            
+                            return View(viewModel);
+                        }
                     }
                 }
-                return RedirectToAction("loginPage");
+                return View(viewModel);
             }
             else
             {
-                return RedirectToAction("loginPage");
+                return RedirectToAction("ManagerPage");
             }
 
         }
@@ -372,6 +370,7 @@ namespace LeaveApp.Controllers
 
         public ActionResult AboutUs()
         {
+            
             return View();
         }
 

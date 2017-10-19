@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿
+<!DOCTYPE html>
 <html>
 
 
@@ -42,8 +43,9 @@
                 <div class="nav-collapse collapse">
                 
                     <ul class="nav">
-                        <li><a class="brand" @Html.ActionLink("Leave Management System","")</a></li>
-                        <li>@Html.ActionLink("About", "AboutUs")</li>
+                        <li><a class="brand">Leave Management System</a></li>
+                        <li>@Html.ActionLink("Home", "appForm", "App", new { empId = Session["userid"] }, null)</li>
+                        <li>@Html.ActionLink("About", "AboutUs", "App")</li>
                         <li>@Html.ActionLink("Contact ", "ContactUs")</li>
                         <li>@Html.ActionLink("Logout","")</li>
                     </ul>
